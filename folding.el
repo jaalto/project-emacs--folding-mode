@@ -17,7 +17,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     http://savannah.nongnu.org/projects/emacs-tiny-tools
 
-(defconst folding-version-time "2013.0613.1821"
+(defconst folding-version-time "2013.1001.0427"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -142,7 +142,7 @@
 ;;          After yank
 ;;          ;;{{{ fold all lines together }}}
 ;;
-;;  Relates packages or modes
+;;  Related packages or modes
 ;;
 ;;      Folding.el was designed to be a content organizer and it is most
 ;;      suitable for big files. Sometimes people misunderstand the
@@ -3116,11 +3116,13 @@ If you're going to change the beginning and end mark in
 ;;;###autoload
 (defun turn-off-folding-mode ()
   "Turn off folding."
+  (interactive)
   (folding-mode -1))
 
 ;;;###autoload
 (defun turn-on-folding-mode ()
   "Turn on folding."
+  (interactive)
   (folding-mode 1))
 
 ;;;###autoload
