@@ -1,0 +1,38 @@
+Package: folding-mode
+Section: extensions
+License: GPL-2+
+Depends: emacs (>= 22)
+Status: stable
+Archive:
+Maintainer: Jari Aalto <jari.aalto@cante.net>
+Bugs:
+Upstream: Jari Aalto <jari.aalto@cante.net>
+Upstream-Bugs: https://github.com/jaalto/project-emacs--folding-mode/issues
+Vcs-Type: git
+Vcs-Url: git://github.com/jaalto/project-emacs--folding-mode
+Vcs-Browser: https://github.com/jaalto/project-emacs--folding-mode
+Homepage: https://github.com/jaalto/project-emacs--folding-mode
+Wiki: http://www.emacswiki.org/emacs/FoldingMode
+Commentary: folding.el
+Info:
+Description: A folding-editor-like minor mode
+ Folding mode handles a document as a tree, where each branch
+ is bounded by special markers `{{{' and `}}}'. A branch can be
+ placed inside another branch, creating a complete hierarchical
+ structure.
+ .
+ To start folding mode, give the command: `M-x' `folding-mode'
+ `RET'. The mode line should contain the string "Fld" indicating
+ that folding mode is activated.
+ .
+ When loading a document containing fold marks, Folding mode is
+ automatically started and all folds are closed. For example when
+ loading my init file, only the following lines (plus a few lines
+ of comments) are visible:
+ .
+     ;;{{{ General...
+     ;;{{{ Keyboard...
+     ;;{{{ Packages...
+     ;;{{{ Major modes...
+     ;;{{{ Minor modes...
+     ;;{{{ Debug...
