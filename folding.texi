@@ -19,19 +19,17 @@
 @direntry
 * folding: folding editor minor mode for Emacs
 @end direntry
-@menu
-* folding Installation::
-* folding documentation::
-* folding custom::
-* folding examples::
-@end menu
 
 @node Top, folding Installation, (dir), (dir)
 @noindent Author:      Jamie Lokier    <jamie@@imbolc.ucc.ie>
 Jari Aalto      <jari.aalto@@poboxes.com>
 Anders Lindgren <andersl@@csd.uu.se>
-
-@noindent Preface
+@menu
+* folding Installation::
+* folding Documentation::
+* folding Customization::
+* folding Examples::
+@end menu
 
      This package provides a minor mode, compatible with all major
      editing modes, for folding (hiding) parts of the edited text or
@@ -57,8 +55,7 @@ Anders Lindgren <andersl@@csd.uu.se>
      individual functions: you may be better served by hideshow.el
      or imenu.el (which can parse the function indexes)
 
-@node folding Installation, folding documentation, Top, Top
-@section Folding installation
+@node folding Installation
 
      The best way to use folding is to turn it on explicitely when
      needed using @command{M-x folding-mode}.
@@ -76,8 +73,7 @@ Anders Lindgren <andersl@@csd.uu.se>
 
 @noindent To remove folding, call `M-x' `folding-uninstall'.
 
-@node folding documentation, folding custom, folding Installation, Top
-@section Folding documentation
+@node folding Documentation, folding Customization, folding Installation, Top
 
 @noindent Tutorial
 
@@ -248,8 +244,7 @@ find the time required to rewrite the core of the package. Since the
 package, in it's current state, is much more powerful than the
 original, we have decided to release this code.
 
-@node folding custom, folding examples, folding documentation, Top
-@section Folding customization
+@node folding Customization, folding Examples, folding Documentation, Top
 
 @noindent Customization: general
 
@@ -342,8 +337,7 @@ bindings, add the following line to your init file:
 set the variable `folding-isearch-install' to nil before loading this
 package.
 
-@node folding examples,  , folding custom, Top
-@section Folding examples
+@node folding Examples,  , folding Customization, Top
 
 @noindent Example: personal setup
 
