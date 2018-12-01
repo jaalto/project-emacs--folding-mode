@@ -167,8 +167,8 @@
 ;;         hideshow.el
 ;;      o  Organizing large blocks - use folding.el
 ;;      o  For text, `outline-mode' is more non-intrusive than folding.
-;;         Look at Emacs NEWS file (`C-x' `n') and you can see beatifully
-;;         laid content.
+;;         Look at Emacs NEWS file (`C-x' `n') and you can see beautifully
+;;         laid out content.
 ;;
 ;;  Tutorial
 ;;
