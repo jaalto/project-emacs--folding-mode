@@ -17,7 +17,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     http://savannah.nongnu.org/projects/emacs-tiny-tools
 
-(defconst folding-version-time "2014.0401.0703"
+(defconst folding-version-time "2019.0430.1511"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -2572,7 +2572,7 @@ References:
 Return t ot nil if marks were removed."
   (interactive)
   (if (not (folding-mark-look-at))
-      (when (called-interactively-p 'interactive)
+      (when (not (or executing-kbd-macro noninteractive))
         (message "Folding: Cursor not over fold. Can't remove fold marks.")
         nil)
     (destructuring-bind (beg end)
@@ -2611,7 +2611,7 @@ Point must be over beginning fold mark."
       (if (and beg end)
           (folding-region-open-close beg end hide)))
      (t
-      (if (called-interactively-p 'interactive)
+      (if (not (or executing-kbd-macro noninteractive))
           (message "point is not at fold beginning."))))))
 
 (defun folding-display-name ()
@@ -3315,7 +3315,7 @@ Mouse behavior
                      (run-hooks hook-symbol)))
             (folding-set-mode-line))
           (and folding-folding-on-startup
-               (if (or (called-interactively-p 'interactive)
+               (if (or (not (or executing-kbd-macro noninteractive))
                        arg
                        inter)
                    (folding-whole-buffer)
