@@ -1,0 +1,462 @@
+@c -*- mode: texinfo -*-
+\input texinfo
+
+@c %**start of header
+@setfilename info/folding
+@settitle folding
+@documentencoding ISO-8859-1
+@c %**end of header
+
+@c This file was trivially adapted from emacs-goodies-el.texi
+@c EDITION 30.2
+@c UPDATED 25 Nov 2009
+@c Copyright: 2000-2003 Roland Mas <lolando@debian.org>,
+@c  2005-2014 Peter S Galbraith <psg@debian.org>
+@c  2014 Julian Gilbey <jdg@debian.org>
+@c License: GPL-2+
+
+@dircategory Emacs
+@direntry
+* folding: folding editor minor mode for Emacs
+@end direntry
+
+@node Top, folding Installation, (dir), (dir)
+@noindent Author:      Jamie Lokier    <jamie@@imbolc.ucc.ie>
+Jari Aalto      <jari.aalto@@poboxes.com>
+Anders Lindgren <andersl@@csd.uu.se>
+@menu
+* folding Installation::
+* folding Documentation::
+* folding Customization::
+* folding Examples::
+@end menu
+
+     This package provides a minor mode, compatible with all major
+     editing modes, for folding (hiding) parts of the edited text or
+     program.
+
+     Folding mode handles a document as a tree, where each branch
+     is bounded by special markers @{@{@{ and @}@}@}. A branch can be
+     placed inside another branch, creating a complete hierarchical
+     structure.
+
+     Folding mode can CLOSE a fold, leaving only the initial `@{@{@{'
+     and possibly a comment visible.
+
+     It can also ENTER a fold, which means that only the current
+     fold will be visible, all text above `@{@{@{' and below `@}@}@}'
+     will be invisible.
+
+     Please note, that the maintainers do not recommend to use only
+     folding for you your code layout and navigation. Folding.el is
+     on its best when it can "chunk" large sections of code inside
+     folds. The larger the chunks, the more the usability of
+     folding will increase. Folding.el is not meant to hide
+     individual functions: you may be better served by hideshow.el
+     or imenu.el (which can parse the function indexes)
+
+@node folding Installation
+
+     The best way to use folding is to turn it on explicitely when
+     needed using @command{M-x folding-mode}.
+
+     But if you always use folding, then consider adding these lines
+     to your @file{~/.emacs} file:
+
+@example
+         (if (load "folding" 'nomessage 'noerror)
+             (folding-mode-add-find-file-hook))
+@end example
+
+     The same folding marks can be used in `vim' editor command
+     "set fdm=marker".
+
+@noindent To remove folding, call `M-x' `folding-uninstall'.
+
+@node folding Documentation, folding Customization, folding Installation, Top
+
+@noindent Tutorial
+
+     To start folding mode, give the command: @command{M-x
+folding-mode}. The mode line should contain the string "Fld"
+indicating that folding mode is activated.
+
+     When loading a document containing fold marks, Folding mode is
+automatically started and all folds are closed. For example when
+loading my init file, only the following lines (plus a few lines of
+comments) are visible:
+
+@verbatim
+;;{{{ General...
+;;{{{ Keyboard...
+;;{{{ Packages...
+;;{{{ Major modes...
+;;{{{ Minor modes...
+;;{{{ Debug...
+@end verbatim
+
+     To enter a fold, use @key{C-c @ >}. To show it without entering, use
+@key{C-c @ C-s}, which produces this display:
+
+@verbatim
+;;{{{ Minor modes
+
+;;{{{ Follow mode...
+;;{{{ Font-lock mode...
+;;{{{ Folding...
+
+;;}}}
+@end verbatim
+
+     To show everything, just as the file would look like if Folding
+mode hadn't been activated, give the command @command{M-x
+folding-open-buffer}, normally bound to @key{C-c @ C-o}.  To
+close all folds and go to the top level, the command
+@command{folding-whole-buffer} could be used.
+
+@noindent Mouse support
+
+     Folding mode v2.0 introduced mouse support. Folds can be shown or
+hidden by simply clicking on a fold mark using mouse button 3.  The
+mouse routines have been designed to call the original function bound
+to button 3 when the user didn't click on a fold mark.
+
+@noindent The menu
+
+     A menu is placed in the "Tools" menu. Should no Tools menu exist
+(Emacs 19.28) the menu will be placed in the menu bar.
+
+@noindent ISearch
+
+     When searching using the incremental search (C-s) facilities,
+folds will be automagically entered and closed.
+
+@noindent Problems
+
+    Uneven fold marks
+
+     Oops, I just deleted some text, and a fold mark got deleted!
+What should I do?  Trust me, you will eventually do this sometime. the
+easiest way is to open the buffer using @command{folding-open-buffer}
+(@key{C-c @ C-o}) and add the fold mark by hand. To find mismatching
+fold marks, the package `occur' is useful. The command:
+
+@verbatim
+         M-x occur RET {{{\|}}} RET
+@end verbatim
+
+     will extract all lines containing folding marks and present them
+in a separate buffer.
+
+     Even though all folding marks are correct, Folding mode sometimes
+gets confused, especially when entering and leaving folds very
+often. To get it back on track, press @key{C-g} a few times and give the
+command @command{folding-open-buffer} (@key{C-c @ C-o}).
+
+    Fold must have a label
+
+     When you make a fold, be sure to write some text for the name of
+the fold, otherwise there may be an error "extraneous fold mark..."
+Write like this:
+
+@verbatim
+         ;;{{{ Note
+         ;;}}}
+@end verbatim
+
+     instead of
+
+@verbatim
+         ;;{{{
+         ;;}}}
+@end verbatim
+
+    folding-whole-buffer doesn't fold whole buffer
+
+     If you call commands @command{folding-open-buffer} and
+@command{folding-whole-buffer} and notice that there are open fold
+sections in the buffer, then you have mismatch of folds somewhere. Run
+@command{M-x occur} and type the regexp @code{@{@{@{\|@}@}@}} to check where
+is the extra open or closing fold mark.
+
+@noindent Folding and outline modes
+
+     Folding mode is not the same as Outline mode, a major and minor
+mode which is part of the Emacs distribution. The two packages do,
+however, resemble each other very much.  The main differences between
+the two packages are:
+
+@itemize @bullet
+@item
+Folding mode uses explicit marks, @code{@{@{@{} and `@}@}@}', to
+mark the beginning and the end of a branch.
+Outline, on the other other hand, tries to use already
+existing marks, like the `\section' string in a TeX
+document.
+
+@item
+Outline mode has no end marker which means that it is
+impossible for text to follow a sub-branch.
+
+@item
+Folding mode use the same markers for branches on all depths,
+Outline mode requires that marks should be longer the
+further, down in the tree you go, e.g `\chap', \section',
+`\subsection', `\subsubsection'. This is needed to
+distinguish the next mark at the current or higher levels
+from a sub-branch, a problem caused by the lack of
+end-markers.
+
+@item
+Folding mode has mouse support, you can navigate through a
+folded document by clicking on fold marks. (The XEmacs version
+of Outline mode has mouse support.)
+
+@item
+The Isearch facilities of Folding is capable of
+automatically to open folds. Under Outline, the the entire
+document must be opened prior isearch.
+@end itemize
+
+     In conclusion, Outline mode is useful when the document being
+edited contains natural markers, like LaTeX. When writing code natural
+markers are hard to find, except if you're happy with one function per
+fold (I'm not).
+
+@noindent Personal reflections by Anders Lindgren
+
+     When writing this, version 2.0 of Folding mode is just about to
+be released. The current version has proven itself stable during a
+months of testing period. In other words: we haven't had time to touch
+the folding for quite some time.
+
+     Our plan was from the beginning to rewrite the entire package,
+including replacing the core of the program, written using old Emacs
+technology (selective display), and replace it with modern
+equivalences, like overlays or text-properties for Emacs and extents
+for XEmacs.
+
+     Unfortunately, this has not yet been done, even though we have
+implemented most other items on our to-do agenda.
+
+     It is not likely that any of us, even in the near future, will
+find the time required to rewrite the core of the package. Since the
+package, in it's current state, is much more powerful than the
+original, we have decided to release this code.
+
+@node folding Customization, folding Examples, folding Documentation, Top
+
+@noindent Customization: general
+
+     The behavior of Folding mode is controlled mainly by a set of
+Emacs Lisp variables. This section will discuss the most useful ones,
+for more details please see the code. The descriptions below assumes
+that you know a bit about how to use simple Emacs Lisp and knows how
+to edit ~/.emacs, your init file.
+
+@noindent Customization: hooks
+
+     The normal procedure when customizing a package is to write a
+function doing the customization. The function is then added to a hook
+which is called at an appropriate time. (Please see the example
+section below.)  The following hooks are available:
+@table @samp
+@item folding-mode-hook
+Called when folding mode is activated.
+@item <major mode>-folding-hook
+Called when starting folding mode in a buffer with major
+mode set to <major mode>. (e.g. When editing C code
+the hook `c-mode-folding-hook' is called.)
+@item folding-load-hook
+Called when folding mode is loaded into Emacs.
+@end table
+
+@noindent Customization: The Mouse
+
+     The variable @code{folding-behave-table} contains the actions
+which should be performed when the user clicks on an open fold, a
+closed fold etc.  For example, if you prefer to `enter' a fold rather
+than `open' it you should rebind this variable.
+
+     The variable @code{folding-default-mouse-keys-function} contains
+the name of the function used to bind your mouse keys. To use your own
+mouse bindings, create a function, say
+@command{my-folding-bind-mouse}, and set this variable to it.
+
+@noindent Customization: Keymaps
+
+     When Emacs 19.29 was released, the keymap was divided into strict
+parts. (This division existed before, but a lot of packages, even the
+ones delivered with Emacs, ignored them.)
+
+@verbatim
+         C-c <letter>    -- Reserved for the users private keymap.
+         C-c C-<letter>  -- Major mode. (Some other keys are
+                            reserved as well.)
+         C-c <Punctuation Char> <Whatever>
+                         -- Reserved for minor modes.
+@end verbatim
+
+     The reason why @key{C-c@@} was chosen as the default prefix is
+that it is used by outline-minor-mode. It is not likely that few
+people will try to use folding and outline at the same time.
+
+     However, old key bindings have been kept if possible.  The
+variable @code{folding-default-keys-function} specifies which function
+should be called to bind the keys. There are various function to
+choose from how user can select the keybindings.  To use the old key
+bindings, add the following line to your init file:
+
+@verbatim
+         (setq folding-default-keys-function
+               'folding-bind-backward-compatible-keys)
+@end verbatim
+
+     To define keys similar to the keys used by Outline mode, use:
+
+@verbatim
+         (setq folding-default-keys-function
+               'folding-bind-outline-compatible-keys)
+@end verbatim
+
+@noindent Customization: adding new major modes
+
+     To add fold marks for a new major mode, use the function
+@command{folding-add-to-marks-list}. Example:
+
+@verbatim
+         (folding-add-to-marks-list
+          'c-mode "/* {{{ " "/* }}} */" " */" t)
+         (folding-add-to-marks-list
+          'java-mode "// {{{ " "// }}}" nil t)
+@end verbatim
+
+@noindent Customization: ISearch
+
+     If you don't like the extension folding.el applies to isearch,
+set the variable `folding-isearch-install' to nil before loading this
+package.
+
+@node folding Examples,  , folding Customization, Top
+
+@noindent Example: personal setup
+
+     To define your own key binding instead of using the standard
+ones, you can do like this:
+
+@verbatim
+          (setq folding-mode-prefix-key "\C-c")
+          ;;
+          (setq folding-default-keys-function
+              '(folding-bind-backward-compatible-keys))
+          ;;
+          (setq folding-load-hook 'my-folding-load-hook)
+
+
+          (defun my-folding-load-hook ()
+            "Folding setup."
+
+            (folding-install)  ;; just to be sure
+
+            ;; ............................................... markers ...
+
+            ;;  Change text-mode fold marks. Handy for quick
+            ;;  sh/perl/awk code
+
+            (defvar folding-mode-marks-alist nil)
+
+            (let* ((ptr (assq 'text-mode folding-mode-marks-alist)))
+              (setcdr ptr (list "# {{{" "# }}}")))
+
+            ;; ........................................ bindings ...
+
+            ;;  Put `folding-whole-buffer' and `folding-open-buffer'
+            ;;  close together.
+
+            (defvar folding-mode-prefix-map nil)
+
+            (define-key folding-mode-prefix-map "\C-w" nil)
+            (define-key folding-mode-prefix-map "\C-s"
+                        'folding-show-current-entry)
+            (define-key folding-mode-prefix-map "\C-p"
+                        'folding-whole-buffer))
+@end verbatim
+
+@noindent Example: changing default fold marks
+
+     In case you're not happy with the default folding marks, you can
+change them easily. Here is an example
+
+@verbatim
+         (setq folding-load-hook 'my-folding-load-hook)
+
+         (defun my-folding-load-hook ()
+           "Folding vars setup."
+           (let* ((ptr (assq 'text-mode folding-mode-marks-alist)))
+             (setcdr ptr (list "# {{{" "# }}}"))))
+@end verbatim
+
+
+@noindent Example: choosing different fold marks for mode
+
+     Suppose you sometimes want to use different fold marks for the
+major mode: e.g. to alternate between "# @{@{@{" and "@{@{@{" in `text-mode'
+Call @command{M-x my-folding-text-mode-setup} to change the marks.
+
+@verbatim
+   (defun my-folding-text-mode-setup (&optional use-custom-folding-marks)
+     (interactive
+       (list (y-or-n-p "Use Custom fold marks now? ")))
+     (let* ((ptr (assq major-mode folding-mode-marks-alist))
+            (default-begin "# {{{")
+            (default-end   "# }}}")
+            (begin "{{{")
+            (end   "}}}"))
+       (when (eq major-mode 'text-mode)
+         (unless use-custom-folding-marks
+           (setq  begin default-begin  end default-end)))
+       (setcdr ptr (list begin end))
+       (folding-set-marks begin end)))
+@end verbatim
+
+@noindent Example: AucTex setup
+
+     Suppose you're using comment.sty with AucTeX for editing LaTeX2e
+documents and you have these comment types. You would like to be able
+to set which of these 3 is to be folded at any one time, using a
+simple key sequence: move back and forth easily between the different
+comment types, e.g., "unfold everything then fold on \x".
+
+@verbatim
+         \O   ...  \endO
+         \L   ...  \endL
+         \B   ...  \endB
+
+         (setq folding-load-hook 'my-folding-load-hook)
+
+         (defun my-folding-load-hook ()
+           "Folding vars setup."
+           (let ((ptr (assq 'text-mode folding-mode-marks-alist)))
+             (setcdr ptr (list "\\O" "\\endO"))
+             (define-key folding-mode-prefix-map "C"
+                        'my-folding-marks-change)))
+
+         (defun my-folding-marks-change (&optional selection)
+           "Select folding marks: prefixes nil, C-u and C-u C-u."
+           (interactive "P")
+           (let ((ptr (assq major-mode folding-mode-marks-alist))
+                 input)
+             (when (string-match "^\\(plain-\\|la\\|auc\\)?tex-"
+                                 (symbol-name  major-mode))
+               (setq input
+                     (read-string "Latex \\end(X) Marker (default O): "
+                                  nil nil "O" nil))
+               (setq input (upcase input))
+               (turn-off-folding-mode)
+               (folding-add-to-marks-list
+                major-mode
+                (concat "\\" input) (concat "\\end" input) nil nil t)
+               ;; (setcdr ptr (list (concat "\\" input) (concat "\\end" input)))
+               (turn-on-folding-mode))))
+         ;;  End of example
+@end verbatim
