@@ -2,7 +2,7 @@
 
 ;; This file is not part of Emacs
 
-;; Copyright (C) 2000-2016 Jari Aalto
+;; Copyright (C) 2000-2019 Jari Aalto
 ;; Copyright (C) 1995, 1996, 1997, 1998, 1999 Jari Aalto, Anders Lindgren.
 ;; Copyright (C) 1994 Jari Aalto
 ;; Copyright (C) 1992, 1993 Jamie Lokier, All rights reserved.
@@ -17,7 +17,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     http://savannah.nongnu.org/projects/emacs-tiny-tools
 
-(defconst folding-version-time "2014.0401.0703"
+(defconst folding-version-time "2019.0524.0517"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -553,7 +553,7 @@
 ;;  Old documentation
 ;;
 ;;      The following text was written by Jamie Lokier for the release
-;;      of Folding V1.6. It is included here for no particular reason:
+;;      of Folding 1.6. It is included here for history.
 ;;
 ;;      Emacs 18:
 ;;      Folding mode has been tested with versions 18.55 and
@@ -636,9 +636,9 @@
 
 ;;{{{ History
 
-;; [person version] = developer and his revision tree number.
 ;; NOTE: History records were stopped in 2009 when code was moved under
 ;; version control. See VCS logs.
+;; [person version] = developer and his revision tree number.
 ;;
 ;; Sep  20  2009  23.1             [jari git a80c2d6]
 ;; - Remove 'defmacro custom' for very old Emacs version that did
@@ -1616,7 +1616,6 @@
 ;; <
 ;; < ;;}}}
 ;;
-;;
 ;; X.x  Dec 1   1994    19.28           [jari]
 ;; - Only minor change. Made the folding mode string user configurable.
 ;;   Added these variables:
@@ -1643,7 +1642,7 @@
 (require 'easymenu)
 
 (defvar folding-package-url-location
-  "Latest folding is available at http://cvs.xemacs.org/viewcvs.cgi/XEmacs/packages/xemacs-packages/text-modes/")
+  "https://github.com/jaalto/project-emacs--folding-mode.")
 
 ;;}}}
 ;;{{{ setup: byte compiler hacks
@@ -1661,20 +1660,19 @@
   (defvar folding-xemacs-p (or (boundp 'xemacs-logo)
                                (featurep 'xemacs))
     "Folding determines which emacs version it is running. t if Xemacs.")
-  ;;  loading overlay.el package removes some byte compiler whinings.
+  ;;  By loading overlay.el package, it clears some byte compiler messages.
   ;;  By default folding does not use overlay code.
   (if folding-xemacs-p
       (or (fboundp 'overlay-start)  ;; Already loaded
           (load "overlay" 'noerr)   ;; No? Try loading it.
           (message "\
 ** folding.el: XEmacs 19.15+ has package overlay.el, try to get it.
-               This is only warning. Folding does not use overlays by
+               This is only a warning. Folding does not use overlays by
                default.  You can safely ignore possible overlay byte
                compilation error
                messages."))))
 
 (eval-when-compile
-
   (when nil ;; Disabled 2000-01-05
     ;; While byte compiling
     (if (string= (buffer-name) " *Compiler Input*")
@@ -1871,6 +1869,12 @@ See also `folding-mode-prefix-key'."
   `(define-key
      folding-mode-prefix-map
      ,key ,function))
+
+(defmacro folding-called-interactively-p ()
+  "Return t if interactive."
+  (if (fboundp 'called-interactively-p)
+       `(called-interactively-p 'interactive) ;; Emacs 23+
+     `(not (or executing-kbd-macro noninteractive))))
 
 (defun folding-bind-default-mouse ()
   "Bind default mouse keys used by Folding mode."
@@ -2572,7 +2576,7 @@ References:
 Return t ot nil if marks were removed."
   (interactive)
   (if (not (folding-mark-look-at))
-      (when (called-interactively-p 'interactive)
+      (when (folding-called-interactively-p)
         (message "Folding: Cursor not over fold. Can't remove fold marks.")
         nil)
     (destructuring-bind (beg end)
@@ -2611,7 +2615,7 @@ Point must be over beginning fold mark."
       (if (and beg end)
           (folding-region-open-close beg end hide)))
      (t
-      (if (called-interactively-p 'interactive)
+      (if (folding-called-interactively-p)
           (message "point is not at fold beginning."))))))
 
 (defun folding-display-name ()
@@ -2685,8 +2689,7 @@ In XEmacs user could also set `zmacs-region-stays'."
     `'(interactive "p")))
 
 (defmacro folding-mouse-yank-at-p ()
-  "Check if user use \"yank at mouse point\" feature.
-
+  "Check if user uses \"yank at mouse point\" feature.
 Please see the variable `folding-mouse-yank-at-point'."
   'folding-mouse-yank-at-point)
 
@@ -3168,7 +3171,7 @@ Overview
 
 Folding-mode function
 
-    If Folding mode is not called interactively (`(called-interactively-p 'interactive)' is nil),
+    If Folding mode is not called interactively (`(folding-called-interactively-p)' is nil),
     and it is called with two or less arguments, all of which are nil, then
     the point will not be altered if `folding-folding-on-startup' is set
     and `folding-whole-buffer' is called. This is generally not a good
@@ -3315,7 +3318,7 @@ Mouse behavior
                      (run-hooks hook-symbol)))
             (folding-set-mode-line))
           (and folding-folding-on-startup
-               (if (or (called-interactively-p 'interactive)
+               (if (or (folding-called-interactively-p)
                        arg
                        inter)
                    (folding-whole-buffer)
