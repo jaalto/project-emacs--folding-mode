@@ -17,7 +17,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     http://savannah.nongnu.org/projects/emacs-tiny-tools
 
-(defconst folding-version-time "2019.0524.1559"
+(defconst folding-version-time "2019.0524.1621"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -1866,12 +1866,22 @@ See also `folding-mode-prefix-key'."
      folding-mode-prefix-map
      ,key ,function))
 
+(put 'folding-labels 'lisp-indent-function 0)
+(put 'folding-labels 'edebug-form-spec '(body))
+(defmacro folding-labels (&rest body)
+  "Call `cl-labels' if available."
+  (if (fboundp 'cl-labesl)
+      `(cl-labels ,@body)
+    `(labels ,@body)))
+
 (defmacro folding-exit-minibuffer ()
   "Select `eval-buffer' or `eval-current-buffer'."
   (if (fboundp 'exit-minibuffer)
       `(exit-minibuffer) ;; Emacs 24.4+
     `(isearch-nonincremental-exit-minibuffer)))
 
+;; (put 'folding-eval-buffer 'lisp-indent-function 0)
+(put 'folding-eval-buffer 'edebug-form-spec '(body))
 (defmacro folding-eval-buffer (&rest args)
   "Select `eval-buffer' or `eval-current-buffer'."
   (if (fboundp 'eval-buffer)
@@ -3619,6 +3629,7 @@ placed inside the folded text, which is not normally useful."
        (forward-line (1- arg)))
      (skip-chars-forward "^\r\n")))
 
+;; Instantiate
 (folding-end-of-line-macro)
 
 (defun folding-skip-ellipsis-backward ()
@@ -3662,7 +3673,7 @@ ellipsis), the position of the point in the buffer is preserved, and as
 many folds as necessary are entered to make the surrounding text
 visible. This is useful after some commands eg., search commands."
   (interactive)
-  (labels
+  (folding-labels
       ((open-fold nil
                   (let ((data (folding-show-current-entry noerror t)))
                     (and data
@@ -4230,8 +4241,7 @@ the title."
          prefix)
     ;;  was obsolete function: (buffer-flush-undo new-buffer)
     (buffer-disable-undo new-buffer)
-    (save-excursion
-      (set-buffer new-buffer)
+    (with-current-buffer new-buffer
       (delete-region (point-min)
                      (point-max)))
     (save-restriction
@@ -4974,8 +4984,7 @@ nil means discard it; anything else is stream for print."
   "Replace `isearch-forward-exit-minibuffer' when in `folding-mode'."
   (interactive)
   ;; Make sure we can continue searching outside narrowing.
-  (save-excursion
-    (set-buffer folding-isearch-current-buffer)
+  (with-current-buffer folding-isearch-current-buffer
     (widen))
   (isearch-forward-exit-minibuffer))
 
@@ -4983,8 +4992,7 @@ nil means discard it; anything else is stream for print."
   "Replace `isearch-reverse-exit-minibuffer' when in `folding-mode'."
   (interactive)
   ;; Make sure we can continue searching outside narrowing.
-  (save-excursion
-    (set-buffer folding-isearch-current-buffer)
+  (with-current-buffer folding-isearch-current-buffer
     (widen))
   (isearch-reverse-exit-minibuffer))
 
@@ -4992,8 +5000,7 @@ nil means discard it; anything else is stream for print."
   "Replace `isearch-reverse-exit-minibuffer' while in `folding-mode'."
   (interactive)
   ;; Make sure we can continue searching outside narrowing.
-  (save-excursion
-    (set-buffer folding-isearch-current-buffer)
+  (with-current-buffer folding-isearch-current-buffer
     (widen))
   (folding-exit-minibuffer))
 
