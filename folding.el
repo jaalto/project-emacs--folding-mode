@@ -17,7 +17,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     http://savannah.nongnu.org/projects/emacs-tiny-tools
 
-(defconst folding-version-time "2019.0524.0528"
+(defconst folding-version-time "2019.0524.1559"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -1865,6 +1865,12 @@ See also `folding-mode-prefix-key'."
   `(define-key
      folding-mode-prefix-map
      ,key ,function))
+
+(defmacro folding-exit-minibuffer ()
+  "Select `eval-buffer' or `eval-current-buffer'."
+  (if (fboundp 'exit-minibuffer)
+      `(exit-minibuffer) ;; Emacs 24.4+
+    `(isearch-nonincremental-exit-minibuffer)))
 
 (defmacro folding-eval-buffer (&rest args)
   "Select `eval-buffer' or `eval-current-buffer'."
@@ -4983,13 +4989,13 @@ nil means discard it; anything else is stream for print."
   (isearch-reverse-exit-minibuffer))
 
 (defun folding-isearch-nonincremental-exit-minibuffer ()
-  "Replace `isearch-reverse-exit-minibuffer' when in `folding-mode'."
+  "Replace `isearch-reverse-exit-minibuffer' while in `folding-mode'."
   (interactive)
   ;; Make sure we can continue searching outside narrowing.
   (save-excursion
     (set-buffer folding-isearch-current-buffer)
     (widen))
-  (isearch-nonincremental-exit-minibuffer))
+  (folding-exit-minibuffer))
 
 ;;}}}
 ;;{{{ Special XEmacs support
