@@ -17,7 +17,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     http://savannah.nongnu.org/projects/emacs-tiny-tools
 
-(defconst folding-version-time "2019.0524.0517"
+(defconst folding-version-time "2019.0524.0528"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -1720,18 +1720,14 @@
     "This advice does nothing except adding an optional argument
 to keep the byte compiler happy when compiling Emacs specific code
 with XEmacs.")
-
   ;; XEmacs and Emacs 19 differs when it comes to obsolete functions.
   ;; We're using the Emacs 19 versions, and this simply makes the
   ;; byte-compiler stop wining. (Why isn't there a warning flag which
   ;; could have turned off?)
-
   (and (boundp 'mode-line-format)
        (put 'mode-line-format 'byte-obsolete-variable nil))
-
   (and (fboundp 'byte-code-function-p)
        (put 'byte-code-function-p 'byte-compile nil))
-
   (and (fboundp 'eval-current-buffer)
        (put 'eval-current-buffer 'byte-compile nil)))
 
@@ -1869,6 +1865,12 @@ See also `folding-mode-prefix-key'."
   `(define-key
      folding-mode-prefix-map
      ,key ,function))
+
+(defmacro folding-eval-buffer (&rest args)
+  "Select `eval-buffer' or `eval-current-buffer'."
+  (if (fboundp 'eval-buffer)
+      `(eval-buffer ,@args)
+    `(eval-curren-buffer ,@args))) ;; Old Emacs
 
 (defmacro folding-called-interactively-p ()
   "Return t if interactive."
@@ -4716,12 +4718,12 @@ nil means discard it; anything else is stream for print."
                    (fset 'message real-message-def)
                    (apply 'message args))))
           (unwind-protect
-              (eval-current-buffer printflag)
+              (folding-eval-buffer printflag)
             (fset 'message real-message-def)
             (kill-buffer temp-buffer))
           (or suppress-eval-message
               (message "Evaluating unfolded buffer... Done"))))
-    (eval-current-buffer printflag)))
+    (folding-eval-buffer printflag)))
 
 ;;}}}
 
