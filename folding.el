@@ -5,7 +5,8 @@
 ;; Copyright (C) 2000-2019 Jari Aalto
 ;; Copyright (C) 1995, 1996, 1997, 1998, 1999 Jari Aalto, Anders Lindgren.
 ;; Copyright (C) 1994 Jari Aalto
-;; Copyright (C) 1992, 1993 Jamie Lokier
+;; Copyright (C) 1992, 1993 Jamie Lokier <jamie@shareable.org>
+;;               https://github.com/jlokier
 ;;
 ;; Authors:     Jamie Lokier <jamie A T imbolc.ucc dt ie>
 ;;              Jari Aalto <jari aalto A T cante dt net>
@@ -17,7 +18,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2020.0825.0736"
+(defconst folding-version-time "2020.0825.0747"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
