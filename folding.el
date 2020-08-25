@@ -15,9 +15,9 @@
 ;; Keywords:    tools
 ;;
 ;; [Latest devel version]
-;; Vcs-URL:     http://savannah.nongnu.org/projects/emacs-tiny-tools
+;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2020.0825.0734"
+(defconst folding-version-time "2020.0825.0736"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
