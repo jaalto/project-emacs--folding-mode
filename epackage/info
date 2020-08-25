@@ -16,10 +16,9 @@ Wiki: http://www.emacswiki.org/emacs/FoldingMode
 Commentary: folding.el
 Info:
 Description: A folding-editor-like minor mode
- Folding mode handles a document as a tree, where each branch
- is bounded by special markers `{{{' and `}}}'. A branch can be
- placed inside another branch, creating a complete hierarchical
- structure.
+ Folding mode handles a document as a tree, where each branch is
+ bounded by special markers `{{{' and `}}}'. A branch can be placed
+ inside another branch, creating a complete hierarchical structure.
  .
  To start folding mode, give the command: `M-x' `folding-mode'
  `RET'. The mode line should contain the string "Fld" indicating
@@ -36,3 +35,5 @@ Description: A folding-editor-like minor mode
      ;;{{{ Major modes...
      ;;{{{ Minor modes...
      ;;{{{ Debug...
+ .
+ The concept and utility was created by Jamie Lokier in 1992.
