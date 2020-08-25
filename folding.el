@@ -5,7 +5,7 @@
 ;; Copyright (C) 2000-2019 Jari Aalto
 ;; Copyright (C) 1995, 1996, 1997, 1998, 1999 Jari Aalto, Anders Lindgren.
 ;; Copyright (C) 1994 Jari Aalto
-;; Copyright (C) 1992, 1993 Jamie Lokier, All rights reserved.
+;; Copyright (C) 1992, 1993 Jamie Lokier
 ;;
 ;; Authors:     Jamie Lokier <jamie A T imbolc.ucc dt ie>
 ;;              Jari Aalto <jari aalto A T cante dt net>
@@ -17,7 +17,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     http://savannah.nongnu.org/projects/emacs-tiny-tools
 
-(defconst folding-version-time "2019.0524.1621"
+(defconst folding-version-time "2020.0825.0734"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
