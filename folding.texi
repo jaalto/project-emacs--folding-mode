@@ -17,7 +17,7 @@
 
 @dircategory Emacs
 @direntry
-* folding: folding editor minor mode for Emacs
+* Folding: (folding).  Folding editor minor mode for Emacs.
 @end direntry
 
 @node Top, folding Installation, (dir), (dir)
