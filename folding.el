@@ -4570,9 +4570,9 @@ buffer without affecting the default value for a particular mode."
           (or modified
               (progn
                 (fset 'ask-user-about-supersession-threat
-                      '(lambda (&rest x) nil))
+                      #'(lambda (&rest x) nil))
                 (fset 'ask-user-about-lock
-                      '(lambda (&rest x) nil))
+                      #'(lambda (&rest x) nil))
                 (set-buffer-modified-p t))) ; Prevent file locking in the loop
           (while list
             (if overlay-p
