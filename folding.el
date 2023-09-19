@@ -4651,7 +4651,7 @@ buffer without affecting the default value for a particular mode."
                                     (select-window window)
                                     (goto-char point)
                                     (vertical-motion
-                                     (- (lsh (window-height window) -1)))
+                                     (- (ash (window-height window) -1)))
                                     (set-window-start window (point))
                                     (set-window-point window point))
                                 (set-window-start window (or start 1))
