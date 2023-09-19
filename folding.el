@@ -18,7 +18,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2023.0919.1039"
+(defconst folding-version-time "2023.0919.1041"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -1758,7 +1758,7 @@ with XEmacs.")
           (while (> len 0)
             (if (char-equal (aref str (1- len)) char)
                 (aset ret (1- len) to-char))
-            (decf len))
+            (setq len (1- len)))
           ret)))
 
     (defadvice kill-new (around folding-win32-fix-selective-display act)
@@ -5360,7 +5360,7 @@ The result will be:
               (goto-char (marker-position marker))
               (beginning-of-line)
               (insert  left " " (int-to-string count) "\n\n")
-              (incf count)
+              (setq count (1+ count))
               (setq done t)))
           (goto-char (marker-position marker))
           (when done
