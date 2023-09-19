@@ -18,7 +18,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2023.0919.1045"
+(defconst folding-version-time "2023.0919.1046"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -3830,7 +3830,9 @@ This depends on current line's contents."
       (folding-shift-out))))
 
 (defun folding-toggle-show-hide ()
-  "Run folding-show-current-entry or folding-hide-current-entry depending on current line's contents."
+  "Run `folding-show-current-entry'.
+Alternatively `folding-hide-current-entry' depending on current
+line\\='s contents."
   (interactive)
   (beginning-of-line)
   (let ((current-line-mark (folding-mark-look-at)))
