@@ -18,7 +18,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2023.0919.1041"
+(defconst folding-version-time "2023.0919.1043"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -2599,7 +2599,7 @@ Return t ot nil if marks were removed."
       (when (folding-called-interactively-p)
         (message "Folding: Cursor not over fold. Can't remove fold marks.")
         nil)
-    (destructuring-bind (beg end)
+    (cl-destructuring-bind (beg end)
         (folding-show-current-entry)
       (let ((kill-whole-line t))
         ;;  must be done in this order, because point moves after kill.
@@ -3079,7 +3079,7 @@ It prevents 'binary pollution' upon save."
   "Return folding font-lock keywords for MODE."
   ;;  Add support mode-by-mode basis. Check if mode is already
   ;;  handled from the property list.
-  (destructuring-bind (beg end ignore)
+  (cl-destructuring-bind (beg end ignore)
       (folding-get-mode-marks (or mode major-mode))
     ;; `ignore' is not used, add no-op for byte compiler
     (or ignore
@@ -5335,11 +5335,11 @@ The result will be:
   (when (and (stringp comment-end)
              (string-match "[^ \t]" comment-end))
     (error "Folding: Mode defines non-empty `comment-end'."))
-  (let* ((count          0)
+  (let* ((count 0)
          (comment-regexp (concat "^" comment-start))
-         (marker         (point-marker))
+         (marker (point-marker))
          done)
-    (destructuring-bind (left right ignore)
+    (cl-destructuring-bind (left right ignore)
         (folding-get-mode-marks)
       ;; Bytecomp silencer: variable ignore bound but not referenced
       (if ignore (setq ignore ignore))
