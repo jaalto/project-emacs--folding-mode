@@ -18,7 +18,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2023.0919.1046"
+(defconst folding-version-time "2023.0919.1052"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -2022,7 +2022,7 @@ For the good ol' key bindings, please use the function
 (defcustom folding-shift-in-on-goto t
   "*Flag in folding adviced function `goto-line'.
 If non-nil, folds are entered when going to a given line.
-Otherwise the buffer is unfolded. Can also be set to 'show.
+Otherwise the buffer is unfolded. Can also be set to \\='show.
 This variable is used only if `folding-advice-instantiate' was
 non-nil when folding was loaded.
 
@@ -2176,7 +2176,7 @@ started in C mode."
 
 ;; Q: should this inherit mouse-yank-at-point's value? maybe not.
 (defvar folding-mouse-yank-at-point t
-  "If non-nil, mouse activities are done at point instead of 'mouse cursor'.
+  "If non-nil, mouse activities are done at point instead of mouse cursor.
 Behaves like `mouse-yank-at-point'.")
 
 (defcustom folding-folding-on-startup t
@@ -2214,11 +2214,11 @@ See also `folding-tidy-inside'."
 ;; description in the mode line to reflect the current fold depth.
 
 (defconst folding-inside-string " "     ; was ' inside ',
-  "Mode line addition to show 'inside' levels of fold.")
+  "Mode line addition to show inside levels of fold.")
 
 ;;;###autoload
 (defcustom folding-inside-mode-name "Fld"
-  "*Mode line addition to show inside levels of 'fold' ."
+  "*Mode line addition to show inside levels of fold."
   :type  'string
   :group 'folding)
 
@@ -2254,11 +2254,11 @@ See also `folding-tidy-inside'."
     (up         folding-shift-out)
     (other      folding-mouse-call-original))
   "*Table of of logical commands and their associated functions.
-If you want fold to behave like `folding-shift-in', when it 'open'
+If you want fold to behave like `folding-shift-in', when it \"open\"
 a fold, you just change the function entry in this table.
 
 Table form:
-  '( (LOGICAL-ACTION  CMD) (..) ..)"
+  \\='((LOGICAL-ACTION  CMD) ...)"
   :type '(repeat
           (symbol   :tag "logical action")
           (function :tag "callback"))
@@ -2477,17 +2477,17 @@ Return:
 
 MODE
 
- 'move      move over fold mark
+ \\='move      move over fold mark
 
 Return:
 
   0 1       numberp, line has fold begin mark
             0 = closed, 1 = open,
-            11 = open, we're inside fold, and this is top marker
+            11 = open, we are inside fold, and this is top marker
 
-  'end      end mark
+  \\='end      end mark
 
-  'end-in   end mark, inside fold, floor marker
+  \\='end-in   end mark, inside fold, floor marker
 
   nil       no fold marks .."
   (let* (case-fold-search
@@ -2517,7 +2517,7 @@ Return:
          (t ;; open fold marker
           (goto-char (point-min))
           (cond
-           ((and stack ;; we're inside fold
+           ((and stack ;; we are inside fold
                  ;;  allow spaces
                  (looking-at (concat "[ \t\n]*" bm)))
             (setq ret 11))
@@ -2613,7 +2613,7 @@ Return t ot nil if marks were removed."
         t))))
 
 (defun folding-hide-current-subtree ()
-  "Call `folding-show-current-subtree' with argument 'hide."
+  "Call `folding-show-current-subtree' with argument \\='hide."
   (interactive)
   (folding-show-current-subtree 'hide))
 
@@ -2664,9 +2664,9 @@ Point must be over beginning fold mark."
 Event must be simple click, no dragging.
 
 ACT
-  'mouse-point  return the 'mouse cursor' point
-  'window       return window pointer
-  'col-row      return list (col row)"
+  \\='mouse-point  return the mouse cursor point
+  \\='window       return window pointer
+  \\='col-row      return list (col row)"
   (cond
    ((not folding-xemacs-p)
     ;; short Description of FSF mouse event
@@ -3041,7 +3041,7 @@ The local variables can be inside a fold."
 (defun folding-mode-write-file ()
   "Folded files must be controlled by folding before saving.
 This function turns on the folding mode if it is not activated.
-It prevents 'binary pollution' upon save."
+It prevents binary pollution upon save."
   (let* ((check-func  folding-check-folded-file-function)
          (no-re      folding-mode-hook-no-regexp)
          (bn         (or (buffer-name) "")))
@@ -4347,8 +4347,14 @@ the title."
 
 ;;{{{ A function to set default marks, `folding-add-to-marks-list'
 
-(defun folding-add-to-marks-list (mode top bottom
-                                       &optional secondary noforce message)
+(defun folding-add-to-marks-list
+    (mode
+     top
+     bottom
+     &optional
+     secondary
+     noforce
+     message)
   "Add/set fold mark list for a particular major mode.
 When called interactively, asks for a `major-mode' name, and for
 fold marks to be used in that mode. It adds the new set to
@@ -4369,7 +4375,7 @@ is also the message displayed if the function is called interactively.
 To set default fold marks for a particular mode, put something like the
 following in your .emacs:
 
-\(folding-add-to-marks-list 'major-mode \"(** {{{ \" \"(** }}} **)\" \" **)\")
+\(folding-add-to-marks-list \\='major-mode \"(** {{{ \" \"(** }}} **)\" \" **)\")
 
 Look at the variable `folding-mode-marks-alist' to see what default settings
 already apply.
@@ -5092,11 +5098,11 @@ Function must return:
   (beg . end)    start of fold, end of fold
 
 Table Format:
- '((MAJOR-MODE COMMENT-FUNCTION UNCOMMENT-FUNCTION) ..)")
+ \\='((MAJOR-MODE COMMENT-FUNCTION UNCOMMENT-FUNCTION) ..)")
 
 (defun folding-insert-advertise-folding-mode ()
   "Insert Small text describing where to the get the folding at point.
-This may be useful 'banner' to inform other people why your code
+This may be useful banner to inform other people why your code
 is formatted like it is and how to view it correctly."
   (interactive)
   (let* ((prefix "")
@@ -5152,7 +5158,7 @@ is formatted like it is and how to view it correctly."
 
 (defun folding-comment-fold  (&optional uncomment)
   "Comment or UNCOMMENT all text inside single fold.
-If there are subfolds this function won't work as expected.
+If there are subfolds this function does not work as expected.
 User must know that there are no subfolds.
 
 The heading has -COM- at the end when the fold is commented.
@@ -5160,16 +5166,16 @@ Point must be over fold heading {{{ when function is called.
 
 Note:
 
- You can use this function only in modes that do _not_ have
- `comment-end'. Ie. don't use this function in modes like C (/* */), because
- nested comments are not allowed. See this:
+ You can use this function only in modes that do not have
+ `comment-end'. I.e. do not use this function in modes like C (/*
+ */), because nested comments are not allowed. See this:
 
     /* {{{ fold */
        code  /* comment of the code */
     /* }}} */
 
- Fold can't know how to comment the `code' inside fold, because comments
- do not nest.
+ Fold cannot know how to comment the code inside fold, because
+ comments do not nest.
 
 Implementation detail:
 
@@ -5248,7 +5254,7 @@ Folding: function usage error, mode with `comment-end' is not supported.")))
 (defun folding-convert-to-major-folds ()
   "Convert fold mark items according to `major-mode'.
 This function replaces all fold markings }}} and {{{
-with major mode's fold marks.
+with major mode\\='s fold marks.
 
 As a side effect also corrects all foldings to standard notation.
 Eg. following, where correct folding-beg should be \"#{{{ \"
@@ -5264,7 +5270,7 @@ Note that /// marks foldings.
   #///
   #/// title
 
-You must 'unfold' whole buffer before using this function."
+You must unfold whole buffer before using this function."
   (interactive)
   (let (case-fold-search
         (bm "{{{")                      ; begin match mark
