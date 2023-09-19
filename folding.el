@@ -18,7 +18,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2023.0919.1052"
+(defconst folding-version-time "2023.0919.1053"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -2749,7 +2749,7 @@ When used on XEmacs, return nil if no character was under the mouse."
   "Remove hooks set by folding."
   (turn-off-folding-mode)
   (remove-hook 'finder-mode-hook 'folding-mode)
-  (remove-hook 'write-file-hooks 'folding-mode-write-file)
+  (remove-hook 'write-file-functions 'folding-mode-write-file)
   (remove-hook 'find-file-hooks  'folding-mode-find-file))
 
 ;;;###autoload
