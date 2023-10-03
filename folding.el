@@ -2,7 +2,7 @@
 
 ;; This file is not part of Emacs
 
-;; Copyright (C) 2000-2019 Jari Aalto
+;; Copyright (C) 2000-2023 Jari Aalto
 ;; Copyright (C) 1995, 1996, 1997, 1998, 1999 Jari Aalto, Anders Lindgren.
 ;; Copyright (C) 1994 Jari Aalto
 ;; Copyright (C) 1992, 1993 Jamie Lokier <jamie@shareable.org>
@@ -18,7 +18,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2023.0919.1053"
+(defconst folding-version-time "2023.1003.0958"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -1693,7 +1693,7 @@
     (put 'find-file-noselect 'folding nil))
 
   (defun folding-find-file-noselect ()
-    (let* ((file   (get 'find-file-noselect 'folding))
+    (let* ((file (get 'find-file-noselect 'folding))
            (buffer (and file
                         ;; It may be absolute path name, file.el,
                         ;; or just "file".
@@ -1702,7 +1702,8 @@
                             (get-buffer (concat file ".el"))))))
       (when buffer
         (with-current-buffer buffer
-          (when (symbol-value 'folding-mode) ;; Byte compiler silencer
+          (when (and (boundp 'folding-mode)
+		     (symbol-value 'folding-mode)) ;; Byte compiler silencer
             (turn-off-folding-mode))))))
 
   ;;  See find.func.el  find-function-search-for-symbol
@@ -1739,12 +1740,13 @@ with XEmacs.")
       (set 'zmacs-region-stays t))) ;use `set' to Quiet Emacs Byte Compiler
 
 ;; Work around the NT Emacs Cut'n paste bug in selective-display which
-;; doesn't preserve C-m's. Only installed in problematic Emacs and
-;; in other cases these lines are no-op.
+;; doesn't preserve C-m's. Only installed in problematic Emacs.
+;; For others, these lines are no-op.
 
 (eval-and-compile
   (when (and (not folding-xemacs-p)
-             (memq (symbol-value 'window-system) '(win32 w32)) ; NT Emacs
+	     (and (boundp 'window-system)
+		  (memq (symbol-value 'window-system) '(win32 w32))) ; NT Emacs
              (string< emacs-version "20.4")) ;at least in 19.34 .. 20.3.1
 
     (unless (fboundp 'char-equal)
