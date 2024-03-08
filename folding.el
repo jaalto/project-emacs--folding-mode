@@ -16,7 +16,7 @@
 ;; Keywords:    tools
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2024.0308.0305"
+(defconst folding-version-time "2024.0308.0333"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -100,6 +100,21 @@
 ;;
 ;;          (if (load "folding" 'nomessage 'noerror)
 ;;              (folding-mode-add-find-file-hook))
+;;
+;;      Add also this at the beginning of file:
+;;
+;;           -*- mode: emacs-lisp; mode: folding; folded-file: t; -*-
+;;
+;;      To activate folding on load without local variables:
+::
+;;           (defun my-folding-mode-activate ()
+;;              (save-excursion
+;;                 (goto-char (point-min))
+;;                 (when (and (re-search-forward "^.*{{{" nil t)
+;;                            (re-search-forward "^.*}}}" nil t))
+;;                    (turn-on-folding-mode))))
+;;
+;;           (add-hook 'find-file-hook 'my-folding-mode-activate)
 ;;
 ;;	Folding uses a keymap that conforms with Emacs 19.29 or later.
 ;;	The key bindings are prefixed with "C-c@" instead of old
@@ -2917,7 +2932,7 @@ See also `folding-mode-add-find-file-hook'."
                  (kill-local-variable 'folded-file)))
       ;; In all other cases, unfold buffer.
       (if folding-mode
-          (folding-mode -1)))))
+          (turn-off-folding-mode)))))
 
 ;;;###autoload
 (defun folding-mode-add-find-file-hook ()
