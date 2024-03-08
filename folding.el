@@ -18,7 +18,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2024.0308.0228"
+(defconst folding-version-time "2024.0308.0230"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -1723,15 +1723,13 @@
        ;; Emacs Byte Compiler Shutup fix
        (symbol-function 'mode-motion-highlight-internal)
        event
-       (function
-        (lambda ()
-          (beginning-of-line)
-          (if (folding-mark-look-at)
-              (search-forward-regexp "^[ \t]*"))))
-       (function
-        (lambda ()
-          (if (folding-mark-look-at)
-              (end-of-line)))))))
+       (lambda ()
+         (beginning-of-line)
+         (if (folding-mark-look-at)
+             (search-forward-regexp "^[ \t]*")))
+       (lambda ()
+         (if (folding-mark-look-at)
+             (end-of-line))))))
   (require 'mode-motion)
   (add-hook 'mode-motion-hook 'folding-mode-motion-highlight-fold 'at-end))
 
@@ -3223,10 +3221,9 @@ Mouse behavior
               ;; Restore "%n" (Narrow) in the mode line
               (setq mode-line-format
                     (mapcar
-                     (function
-                      (lambda (item)
-                        (if (equal item 'folding-narrow-placeholder)
-                            "%n" item)))
+                     (lambda (item)
+                       (if (equal item 'folding-narrow-placeholder)
+                           "%n" item))
                      mode-line-format)))
           (cond ;; else
            ((folding-use-overlays-p)
@@ -3271,10 +3268,9 @@ Mouse behavior
           ;; Remove "%n" (Narrow) from the mode line
           (setq mode-line-format
                 (mapcar
-                 (function
-                  (lambda (item)
-                    (if (equal item "%n")
-                        'folding-narrow-placeholder item)))
+                 (lambda (item)
+                   (if (equal item "%n")
+                       'folding-narrow-placeholder item))
                  mode-line-format))))
     (setq folding-mode new-folding-mode)))
 
@@ -4292,11 +4288,10 @@ buffer without affecting the default value for a particular mode."
                          (symbol-name major-mode)
                          "): ")
                  obarray
-                 (function
-                  (lambda (arg)
-                    (and (commandp arg)
-                         (string-match "-mode\\'"
-                                       (symbol-name arg)))))
+                 (lambda (arg)
+                   (and (commandp arg)
+                        (string-match "-mode\\'"
+                                      (symbol-name arg))))
                  t))
           (mode (if (equal mode "")
                     major-mode
@@ -4658,11 +4653,10 @@ nil means discard it; anything else is stream for print."
         (let ((real-message-def (symbol-function 'message))
               (suppress-eval-message))
           (fset 'message
-                (function
-                 (lambda (&rest args)
-                   (setq suppress-eval-message t)
-                   (fset 'message real-message-def)
-                   (apply 'message args))))
+                (lambda (&rest args)
+                  (setq suppress-eval-message t)
+                  (fset 'message real-message-def)
+                  (apply 'message args)))
           (unwind-protect
               (folding-eval-buffer printflag)
             (fset 'message real-message-def)
