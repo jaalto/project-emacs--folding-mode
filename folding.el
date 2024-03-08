@@ -18,7 +18,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2024.0308.0148"
+(defconst folding-version-time "2024.0308.0200"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -84,32 +84,33 @@
 
 ;;  Installation
 ;;
-;;      To install Folding mode, put this file (folding.el) on your
-;;      Emacs `load-path' (or extend the load path to include the
-;;      directory containing this file) and optionally byte compile it.
+;;      To install Folding mode, place this file (folding.el) in your
+;;      Emacs `load-path', such as the directory ~/.emacs.d and
+;;      optionally byte compile it with `M-x' `byte-compile'.
 ;;
-;;      The best way to install folding is the autoload installation,
-;;      so that folding is loaded into your emacs only when you turn on
-;;      `folding-mode'. This statement speeds up loading your .emacs
+;;	The most efficient way to install folding is to use autoload
+;;	installation so that folding is loaded only when
+;;	`folding-mode' is turned on. Add these statements to your
+;;	Emacs init file. See '(info)Init File' for more information.
 ;;
 ;;          (autoload 'folding-mode          "folding" "Folding mode" t)
 ;;          (autoload 'turn-off-folding-mode "folding" "Folding mode" t)
 ;;          (autoload 'turn-on-folding-mode  "folding" "Folding mode" t)
 ;;
-;;      But if you always use folding, then perhaps you want more
-;;      traditional installation. Here Folding mode starts
-;;      automatically when you load a folded file.
-;;
-;;          ;; (setq folding-default-keys-function
-;;          ;;      'folding-bind-backward-compatible-keys)
+;;      If you always use folding, then perhaps you want folding to
+;;      start automatically when you load a folded file:
 ;;
 ;;          (if (load "folding" 'nomessage 'noerror)
 ;;              (folding-mode-add-find-file-hook))
 ;;
-;;      Folding uses a keymap which conforms with the new Emacs
-;;      (started 19.29) style. The key bindings are prefixed with
-;;      "C-c@" instead of old "C-c". To use the old keyboard bindings,
-;;      uncomment the lines in the the above installation example
+;;	Folding uses a keymap that conforms with Emacs 19.29 or later.
+;;	The key bindings are prefixed with "C-c@" instead of old
+;;	"C-c". To use the old keyboard bindings, add this:
+;;
+;;          (setq folding-default-keys-function
+;;                'folding-bind-backward-compatible-keys)
+;;
+;;  Notes
 ;;
 ;;      The same folding marks can be used in `vim' editor command
 ;;      "set fdm=marker".
