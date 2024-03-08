@@ -18,7 +18,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2024.0308.0212"
+(defconst folding-version-time "2024.0308.0215"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -556,7 +556,7 @@
 ;;  Old documentation
 ;;
 ;;      The following text was written by Jamie Lokier for the release
-;;      of Folding 1.6. It is included here for history.
+;;      of Folding 1.6 in 1992. It is included here for history.
 ;;
 ;;      Emacs 18:
 ;;      Folding mode has been tested with versions 18.55 and
@@ -593,9 +593,9 @@
 ;;      exit a fold with the file displayed in two frames. Both
 ;;      windows get fronted. Better fix that sometime.
 ;;
-;;  Future features
+;;  Development ideas
 ;;
-;;      *** I will add a `folding-next-error' sometime. It will only
+;;      *** Maybe add `folding-next-error' sometime. It will only
 ;;      work with Emacs versions later than 18.58, because compile.el
 ;;      in earlier versions does not count line-numbers in the right
 ;;      way, when selective display is active.
@@ -1632,8 +1632,6 @@
 
 ;;{{{ setup: require packages
 
-;;; ......................................................... &require ...
-
 (eval-when-compile
   (or (require 'cl-lib nil 'noerr) ;; Emacs 29.x
       (require 'cl)))
@@ -1651,7 +1649,6 @@
 ;;}}}
 ;;{{{ setup: byte compiler hacks
 
-;;; ............................................. &byte-compiler-hacks ...
 ;;; - This really only should be evaluated in case we're about to byte
 ;;;   compile this file. Since `eval-when-compile' is evaluated when
 ;;;   the uncompiled version is used (great!) we test if the
@@ -1742,8 +1739,6 @@
 
 ;;{{{ setup: some variable
 
-;;; .................................................. &some-variables ...
-
 ;; This is a list of structures which keep track of folds being entered
 ;; and exited. It is a list of (MARKER . MARKER) pairs, followed by the
 ;; symbol `folded'. The first of these represents the fold containing
@@ -1758,8 +1753,6 @@
 
 ;;}}}
 ;;{{{ setup: bind
-
-;;; .......................................................... &v-bind ...
 
 (defgroup folding nil
   "Managing buffers with Folds."
@@ -2093,8 +2086,6 @@ The default is C - c @"
 ;;}}}
 ;;{{{ setup: hooks
 
-;;; ......................................................... &v-hooks ...
-
 (defcustom folding-mode-hook nil
   "*Hook called when Folding mode is entered.
 
@@ -2111,8 +2102,6 @@ started in C mode."
 
 ;;}}}
 ;;{{{ setup: user config
-
-;;; ........................................................ &v-Config ...
 
 ;; Q: should this inherit mouse-yank-at-point's value? maybe not.
 (defvar folding-mouse-yank-at-point t
@@ -2186,8 +2175,6 @@ See also `folding-tidy-inside'."
   :type  'string
   :group 'folding)
 
-;;; ... ... ... ... ... ... ... ... ... ... ... ... ... .... &v-tables ...
-
 (defcustom folding-behave-table
   '((close      folding-hide-current-entry)
     (open       folding-show-current-entry) ; Could also be `folding-shift-in'.
@@ -2203,8 +2190,6 @@ Table form:
           (symbol   :tag "logical action")
           (function :tag "callback"))
   :group 'folding)
-
-;;; ... ... ... ... ... ... ... ... ... ... ... ... ... ..... &v-marks ...
 
 ;;;###autoload
 (defvar folding-mode-marks-alist nil
@@ -2222,8 +2207,6 @@ folding marks during the session.")
 
 ;;}}}
 ;;{{{ setup: private
-
-;;; ....................................................... &v-private ...
 
 (defvar folding-narrow-placeholder nil
   "Internal. Mark where \"%n\" used to be in `mode-line-format'.
