@@ -14,11 +14,9 @@
 ;; Maintainer:  Jari Aalto <jari aalto A T cante dt net>
 ;; Created:     1992
 ;; Keywords:    tools
-;;
-;; [Latest devel version]
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2024.0308.0239"
+(defconst folding-version-time "2024.0308.0241"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
