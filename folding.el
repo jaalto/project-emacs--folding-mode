@@ -18,7 +18,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2023.1003.0958"
+(defconst folding-version-time "2024.0308.0133"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -1874,7 +1874,7 @@ See also `folding-mode-prefix-key'."
 (put 'folding-labels 'edebug-form-spec '(body))
 (defmacro folding-labels (&rest body)
   "Call `cl-labels' if available."
-  (if (fboundp 'cl-labesl)
+  (if (fboundp 'cl-labels)
       `(cl-labels ,@body)
     `(labels ,@body)))
 
