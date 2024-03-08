@@ -18,7 +18,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2024.0308.0205"
+(defconst folding-version-time "2024.0308.0207"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -1677,13 +1677,6 @@
                messages."))))
 
 (eval-when-compile
-  (when nil ;; Disabled 2000-01-05
-    ;; While byte compiling
-    (if (string= (buffer-name) " *Compiler Input*")
-        (progn
-          (message "** folding.el:\
- Info, Ignore [X]Emacs's missing motion/event/posn functions calls"))))
-
   ;; ARGS: (symbol variable-p library)
   (defadvice find-function-search-for-symbol (around folding act)
     "Set folding flag for `find-file-noselect' to open all folds."
