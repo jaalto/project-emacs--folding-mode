@@ -18,7 +18,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2024.0308.0207"
+(defconst folding-version-time "2024.0308.0212"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -1715,45 +1715,6 @@
   "In XEmacs keep the region alive. In Emacs do nothing."
   (if (boundp 'zmacs-region-stays)      ;Keep regions alive
       (set 'zmacs-region-stays t))) ;use `set' to Quiet Emacs Byte Compiler
-
-;; Work around the NT Emacs Cut'n paste bug in selective-display which
-;; doesn't preserve C-m's. Only installed in problematic Emacs.
-;; For others, these lines are no-op.
-
-(eval-and-compile
-  (when (and (not folding-xemacs-p)
-             (and (boundp 'window-system)
-                  (memq (symbol-value 'window-system) '(win32 w32))) ; NT Emacs
-             (string< emacs-version "20.4")) ;at least in 19.34 .. 20.3.1
-
-    (unless (fboundp 'char-equal)
-      (defalias 'char-equal  'equal))
-
-    (unless (fboundp 'subst-char)
-      (defun subst-char (str char to-char)
-        "Replace in STR every CHAR with TO-CHAR."
-        (let ((len   (length str))
-              (ret   (copy-sequence str))) ;because 'aset' is destructive
-          (while (> len 0)
-            (if (char-equal (aref str (1- len)) char)
-                (aset ret (1- len) to-char))
-            (setq len (1- len)))
-          ret)))
-
-    (defadvice kill-new (around folding-win32-fix-selective-display act)
-      "In selective display, convert each C-m to C-a. See `current-kill'."
-      (let* ((string (ad-get-arg 0)))
-        (when (and selective-display (string-match "\C-m" (or string "")))
-          (setq string (subst-char string ?\C-m ?\C-a)))
-        ad-do-it))
-
-    (defadvice current-kill (around folding-win32-fix-selective-display act)
-      "In selective display, convert each C-a back to C-m. See `kill-new'."
-      ad-do-it
-      (let* ((string ad-return-value))
-        (when (and selective-display (string-match "\C-a" (or string "")))
-          (setq string (subst-char string ?\C-a ?\C-m))
-          (setq ad-return-value string))))))
 
 (defvar folding-mode) ;; Byte Compiler silencer
 
