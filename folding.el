@@ -16,7 +16,7 @@
 ;; Keywords:    tools
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2024.0308.0241"
+(defconst folding-version-time "2024.0308.0305"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -4359,6 +4359,7 @@ buffer without affecting the default value for a particular mode."
 (folding-add-to-marks-list 'asm-mode               "; {{{"  "; }}}" nil t)
 (folding-add-to-marks-list 'awk-mode               "# {{{"  "# }}}" nil t)
 (folding-add-to-marks-list 'Bison-mode             "/* {{{" "/* }}} */" " */" t)
+(folding-add-to-marks-list 'latex-mode             "%{{{"   "%}}}" nil t)
 (folding-add-to-marks-list 'LaTeX-mode             "%{{{"   "%}}}" nil t)
 (folding-add-to-marks-list 'TeX-mode               "%{{{"   "%}}}" nil t)
 (folding-add-to-marks-list 'bibtex-mode            "%{{{"   "%}}} */" nil t)
