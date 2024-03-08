@@ -18,7 +18,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2024.0308.0200"
+(defconst folding-version-time "2024.0308.0205"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -1716,25 +1716,7 @@
   (defadvice find-file-noselect (after folding act)
     "When called by `find-function-search-for-symbol', turn folding off."
     (folding-find-file-noselect))
-
-  (defadvice make-sparse-keymap
-    (before
-     make-sparse-keymap-with-optional-argument
-     (&optional byte-compiler-happyfier)
-     activate)
-    "This advice does nothing except adding an optional argument
-to keep the byte compiler happy when compiling Emacs specific code
-with XEmacs.")
-  ;; XEmacs and Emacs 19 differs when it comes to obsolete functions.
-  ;; We're using the Emacs 19 versions, and this simply makes the
-  ;; byte-compiler stop wining. (Why isn't there a warning flag which
-  ;; could have turned off?)
-  (and (boundp 'mode-line-format)
-       (put 'mode-line-format 'byte-obsolete-variable nil))
-  (and (fboundp 'byte-code-function-p)
-       (put 'byte-code-function-p 'byte-compile nil))
-  (and (fboundp 'eval-current-buffer)
-       (put 'eval-current-buffer 'byte-compile nil)))
+) ; eval-when-compile
 
 (defsubst folding-preserve-active-region ()
   "In XEmacs keep the region alive. In Emacs do nothing."
