@@ -2,7 +2,7 @@
 
 ;; This file is not part of Emacs
 
-;; Copyright (C) 2000-2023 Jari Aalto
+;; Copyright (C) 2000-2024 Jari Aalto
 ;; Copyright (C) 1995, 1996, 1997, 1998, 1999 Jari Aalto, Anders Lindgren.
 ;; Copyright (C) 1994 Jari Aalto
 ;; Copyright (C) 1992, 1993 Jamie Lokier <jamie@shareable.org>
@@ -18,7 +18,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2024.0308.0133"
+(defconst folding-version-time "2024.0308.0148"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -47,36 +47,37 @@
 ;; Preface
 ;;
 ;;      This package provides a minor mode, compatible with all major
-;;      editing modes, for folding (hiding) parts of the edited text or
-;;      program.
+;;      editing modes, for folding (hiding) parts of the edited text
+;;      or program.
 ;;
 ;;      Folding mode handles a document as a tree, where each branch
-;;      is bounded by special markers `{{{' and `}}}'. A branch can be
+;;      is bounded by special markers {{{' and }}}'. A branch can be
 ;;      placed inside another branch, creating a complete hierarchical
 ;;      structure. The markers:
 ;;
-;;      o  Are placed to the beginning of line. No spaces.
-;;      o  Are prefixed by mode comment and space as needed.
-;;         For example in C++ mode, the beginning marker is: "// {{{"
-;;         See source code of folding.el and section "Set some useful default
-;;         fold marks" for full listing of the markers. If you need to
-;;         customize these markers, modify `folding-mode-marks-alist' after
-;;         loading this package (See my-folding-load-hook example in this doc).
+;;      o   Are placed at the beginning of the line. No spaces.
+;;      o   Are prefixed by mode comment and space as needed.
+;;          For example, in C++ mode, the beginning marker is: "//
+;;          {{{". See the source code of folding.el and the section
+;;          "Set some useful default fold marks" for a full listing of
+;;          the markers. If you need to customize these markers,
+;;          modify `folding-mode-marks-alist' after loading this
+;;          package (See the my-folding-load-hook example in this
+;;          doc).
 ;;
 ;;      Folding mode can CLOSE a fold, leaving only the initial `{{{'
 ;;      and possibly a comment visible.
 ;;
 ;;      It can also ENTER a fold, which means that only the current
-;;      fold will be visible, all text above `{{{' and below `}}}'
-;;      will be invisible.
+;;      fold will be visible; all text above {{{' and below }}}' will
+;;      be invisible.
 ;;
-;;      Please note, that the maintainers do not recommend to use only
-;;      folding for you your code layout and navigation. Folding.el is
-;;      on its best when it can "chunk" large sections of code inside
-;;      folds. The larger the chunks, the more the usability of
-;;      folding will increase. Folding.el is not meant to hide
-;;      individual functions: you may be better served by hideshow.el
-;;      or imenu.el (which can parse the function indexes)
+;;      Please note that Folding.el is at its best when it can "chunk"
+;;      large sections of code inside folds. The larger the chunks,
+;;      the more the usable folding will be. Folding.el is not meant
+;;      to hide individual functions: you may be better served by
+;;      other packages like hideshow.el or imenu.el (which can parse
+;;      the function indexes).
 
 ;;}}}
 ;;{{{ Installation
@@ -1703,7 +1704,7 @@
       (when buffer
         (with-current-buffer buffer
           (when (and (boundp 'folding-mode)
-		     (symbol-value 'folding-mode)) ;; Byte compiler silencer
+                     (symbol-value 'folding-mode)) ;; Byte compiler silencer
             (turn-off-folding-mode))))))
 
   ;;  See find.func.el  find-function-search-for-symbol
@@ -1745,8 +1746,8 @@ with XEmacs.")
 
 (eval-and-compile
   (when (and (not folding-xemacs-p)
-	     (and (boundp 'window-system)
-		  (memq (symbol-value 'window-system) '(win32 w32))) ; NT Emacs
+             (and (boundp 'window-system)
+                  (memq (symbol-value 'window-system) '(win32 w32))) ; NT Emacs
              (string< emacs-version "20.4")) ;at least in 19.34 .. 20.3.1
 
     (unless (fboundp 'char-equal)
@@ -2742,9 +2743,9 @@ When used on XEmacs, return nil if no character was under the mouse."
 (defun folding-is-hooked ()
   "Check if folding hooks are installed."
   (and (memq 'folding-mode-write-file
-	     (symbol-value (folding-write-file-hook)))
+             (symbol-value (folding-write-file-hook)))
        (memq 'folding-mode-find-file
-	     (symbol-value (folding-find-file-hook)))))
+             (symbol-value (folding-find-file-hook)))))
 
 ;;;###autoload
 (defun folding-uninstall-hooks ()
@@ -3085,7 +3086,7 @@ It prevents binary pollution upon save."
       (folding-get-mode-marks (or mode major-mode))
     ;; `ignore' is not used, add no-op for byte compiler
     (or ignore
-	(setq ignore t))
+        (setq ignore t))
     (setq beg (concat "^[ \t]*" (regexp-quote beg) "[^\r\n]+"))
     (setq end (concat "^[ \t]*" (regexp-quote end)))
     (list
@@ -3109,8 +3110,8 @@ It prevents binary pollution upon save."
         (with-current-buffer buffer
           (when (and (eq major-mode mode)
                      (or font-lock-mode
-			 (and (boundp 'global-font-lock-mode)
-			      global-font-lock-mode)))
+                         (and (boundp 'global-font-lock-mode)
+                              global-font-lock-mode)))
             ;; FIXME: Crude fix. should we use font-lock-fontify-buffer instead?
             (font-lock-mode -1)
             (font-lock-mode 1)))))))
@@ -3702,13 +3703,13 @@ visible. This is useful after some commands eg., search commands."
                              (setq folding-stack
                                    (if folding-stack
                                        (cons (cons (point-min-marker)
-						   (point-max-marker))
+                                                   (point-max-marker))
                                              folding-stack)
                                      '(folded)))
                              (folding-set-mode-line))
                            (folding-narrow-to-region
-			    (car data)
-			    (nth 1 data)))))))
+                            (car data)
+                            (nth 1 data)))))))
     (let ((goal (point)))
       (while (folding-skip-ellipsis-backward)
         (beginning-of-line)
@@ -3716,7 +3717,7 @@ visible. This is useful after some commands eg., search commands."
         (goto-char goal))
       (if folding-narrow-by-default
           (open-fold)
-	(widen)))))
+        (widen)))))
 
 ;;}}}
 ;;{{{ folding-shift-out
@@ -3742,8 +3743,8 @@ visible. This is useful after some commands eg., search commands."
         (if (eq (car folding-stack) 'folded)
             (folding-narrow-to-region nil nil t)
           (folding-narrow-to-region
-	   (marker-position (car (car folding-stack)))
-	   (marker-position (cdr (car folding-stack))) t))
+           (marker-position (car (car folding-stack)))
+           (marker-position (cdr (car folding-stack))) t))
         (and (consp (car folding-stack))
              (set-marker (car (car folding-stack)) nil)
              (set-marker (cdr (car folding-stack)) nil))
@@ -3768,10 +3769,10 @@ subfolds."
       (folding-skip-ellipsis-backward))
   (let ((point (point))
         backward
-	forward
-	start
-	end
-	subfolds-not-p)
+        forward
+        start
+        end
+        subfolds-not-p)
     (unwind-protect
         (or (and (integerp
                   (car-safe (setq backward (folding-skip-folds t))))
@@ -3798,19 +3799,19 @@ subfolds."
                    (folding-subst-regions
                     (append backward (nreverse forward))
                     ?\r ?\n)
-		   ;;  FIXME: this should be moved to font-lock:
-		   ;;  - When fold is closed, the whole line (with code)
-		   ;;    is treated as comment
-		   ;;  - Fon-lock changes all fonts to `font-lock-comment-face'
-		   ;;  - When you again open fold, all text is in color
-		   ;;
-		   ;;  => Font lock should stop at \r, and not use ".*"
-		   ;;     which includes \r character
-		   ;;  This is a workaround, not an efficient one
-		   (if (or (and (boundp 'global-font-lock-mode)
-				global-font-lock-mode)
-			   font-lock-mode)
-		       (font-lock-fontify-region start end))
+                   ;;  FIXME: this should be moved to font-lock:
+                   ;;  - When fold is closed, the whole line (with code)
+                   ;;    is treated as comment
+                   ;;  - Fon-lock changes all fonts to `font-lock-comment-face'
+                   ;;  - When you again open fold, all text is in color
+                   ;;
+                   ;;  => Font lock should stop at \r, and not use ".*"
+                   ;;     which includes \r character
+                   ;;  This is a workaround, not an efficient one
+                   (if (or (and (boundp 'global-font-lock-mode)
+                                global-font-lock-mode)
+                           font-lock-mode)
+                       (font-lock-fontify-region start end))
                    (list start end (not subfolds-not-p))))
             (if noerror
                 nil
@@ -4925,10 +4926,10 @@ nil means discard it; anything else is stream for print."
   (while cmds
     (eval
      `(defun ,(intern (concat "folding-" (symbol-name (car cmds))))
-	nil
-	"Automatically generated"
-	(interactive)
-	(folding-isearch-general (quote ,(car cmds)))))
+        nil
+        "Automatically generated"
+        (interactive)
+        (folding-isearch-general (quote ,(car cmds)))))
     (setq cmds (cdr cmds))))
 
 ;; The HEART! Executes command and updates the foldings.
