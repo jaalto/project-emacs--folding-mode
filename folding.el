@@ -18,7 +18,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2024.0308.0215"
+(defconst folding-version-time "2024.0308.0226"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -2648,24 +2648,10 @@ When used on XEmacs, return nil if no character was under the mouse."
 
 ;;{{{ code: hook
 
-(defmacro folding-find-file-hook ()
-  "Return hook symbol for current version."
-  `(if (boundp 'find-file-hook)
-       'find-file-hook
-     'find-file-hooks))
-
-(defmacro folding-write-file-hook ()
-  "Return hook symbol for current version."
-  `(if (boundp 'write-file-functions)
-       'write-file-functions
-     'write-file-hooks))
-
 (defun folding-is-hooked ()
   "Check if folding hooks are installed."
-  (and (memq 'folding-mode-write-file
-             (symbol-value (folding-write-file-hook)))
-       (memq 'folding-mode-find-file
-             (symbol-value (folding-find-file-hook)))))
+  (and (memq 'folding-mode-write-file write-file-functions)
+       (memq 'folding-mode-find-file find-file-hook)))
 
 ;;;###autoload
 (defun folding-uninstall-hooks ()
@@ -2673,15 +2659,15 @@ When used on XEmacs, return nil if no character was under the mouse."
   (turn-off-folding-mode)
   (remove-hook 'finder-mode-hook 'folding-mode)
   (remove-hook 'write-file-functions 'folding-mode-write-file)
-  (remove-hook 'find-file-hooks  'folding-mode-find-file))
+  (remove-hook 'find-file-hook 'folding-mode-find-file))
 
 ;;;###autoload
 (defun folding-install-hooks ()
   "Install folding hooks."
   (folding-mode-add-find-file-hook)
   (add-hook 'finder-mode-hook 'folding-mode)
-  (or (memq 'folding-mode-write-file (symbol-value (folding-write-file-hook)))
-      (add-hook (folding-write-file-hook) 'folding-mode-write-file 'end)))
+  (or (memq 'folding-mode-write-file write-file-functions)
+      (add-hook 'write-file-functions 'folding-mode-write-file 'end)))
 
 ;;;###autoload
 (defun folding-keep-hooked ()
@@ -2958,8 +2944,8 @@ folded-file: t
 
 The local variables can be inside a fold."
   (interactive)
-  (or (memq 'folding-mode-find-file (symbol-value (folding-find-file-hook)))
-      (add-hook (folding-find-file-hook) 'folding-mode-find-file 'end)))
+  (or (memq 'folding-mode-find-file find-file-hook)
+      (add-hook 'find-file-hook 'folding-mode-find-file 'end)))
 
 (defun folding-mode-write-file ()
   "Folded files must be controlled by folding before saving.
