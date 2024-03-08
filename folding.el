@@ -18,7 +18,7 @@
 ;; [Latest devel version]
 ;; Vcs-URL:     https://github.com/jaalto/project-emacs--folding-mode
 
-(defconst folding-version-time "2024.0308.0226"
+(defconst folding-version-time "2024.0308.0228"
   "Last edit time in format YYYY.MMDD.HHMM.")
 
 ;;{{{ GPL
@@ -3213,7 +3213,6 @@ Mouse behavior
             folding-mode)
         (if folding-mode
             (progn
-              ;; ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ progn ^^^
               ;; turn off folding
               (if (null (folding-use-overlays-p))
                   (setq selective-display nil))
@@ -3229,8 +3228,7 @@ Mouse behavior
                         (if (equal item 'folding-narrow-placeholder)
                             "%n" item)))
                      mode-line-format)))
-          ;; ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ else ^^^
-          (cond
+          (cond ;; else
            ((folding-use-overlays-p)
             ;;  This may be Emacs specific; how about XEmacs?
             ;;
@@ -3278,10 +3276,7 @@ Mouse behavior
                     (if (equal item "%n")
                         'folding-narrow-placeholder item)))
                  mode-line-format))))
-    (setq folding-mode new-folding-mode)
-    (if folding-mode
-        (easy-menu-add folding-mode-menu)
-      (easy-menu-remove folding-mode-menu))))
+    (setq folding-mode new-folding-mode)))
 
 ;;}}}
 ;;{{{ code: setting fold marks
