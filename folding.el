@@ -2,7 +2,7 @@
 
 ;; This file is not part of Emacs
 
-;; Copyright (C) 2000-2024 Jari Aalto
+;; Copyright (C) 2000-2025 Jari Aalto
 ;; Copyright (C) 1995, 1996, 1997, 1998, 1999 Jari Aalto, Anders Lindgren.
 ;; Copyright (C) 1994 Jari Aalto
 ;; Copyright (C) 1992, 1993 Jamie Lokier <jamie@shareable.org>
@@ -3136,7 +3136,7 @@ Fold marks
     \"{{{\" near the beginning. To enter a fold, move the point
     to the folded line and type `\\[folding-shift-in]'. You
     should no longer be able to see the rest of the file, just
-    the contents of the fold, which you couldn't see before. You
+    the contents of the fold, which you couldn\='t see before. You
     can use `\\[folding-shift-out]' to leave a fold, and you can
     enter and exit folds to move around the structure of the
     file.
@@ -3145,8 +3145,8 @@ Fold marks
     It is just hidden. Folded text shows up as a line (the top
     fold mark) with \"...\" at the end. If you are in a fold, the
     mode line displays \"inside n folds Narrow\", and because the
-    buffer is narrowed you can't see outside of the current
-    fold's text.
+    buffer is narrowed you can\='t see outside of the current
+    fold\='s text.
 
     By arranging sections of a large file in folds, and maybe
     subsections in sub-folds, you can move around a file quickly
@@ -3165,7 +3165,7 @@ Managing folds
     will be made into a fold, and the fold will be entered. If
     you just want a new, empty fold, set the mark where you want
     the fold, and then create a new fold there without moving the
-    point. Don't worry if the point is in the middle of a line of
+    point. Don\='t worry if the point is in the middle of a line of
     text, `folding-fold-region' will not break text in the middle
     of a line. After making a fold, the fold is entered and the
     point is positioned ready to enter a title for the fold. Do
